@@ -1,7 +1,16 @@
 "use client";
 import { motion, useInView, Variants } from "framer-motion";
-import { Heart, GraduationCap, BookOpen, HeartHandshake, Users, Briefcase, BookMarked } from "lucide-react";
+import {
+  Heart,
+  GraduationCap,
+  BookOpen,
+  HeartHandshake,
+  Users,
+  Briefcase,
+  BookMarked,
+} from "lucide-react";
 import React, { useRef } from "react";
+import { Button } from "@/components/ui/Button";
 
 const Donate = () => {
   const sectionRef = useRef(null);
@@ -34,40 +43,43 @@ const Donate = () => {
     {
       icon: GraduationCap,
       title: "Sponsor a scholarship",
-      description: "Help a girl continue her education and unlock her full potential through financial support.",
+      description:
+        "Help a girl continue her education and unlock her full potential through financial support.",
     },
     {
       icon: BookOpen,
       title: "Donate school materials",
-      description: "Provide essential learning tools and resources to support her educational journey.",
+      description:
+        "Provide essential learning tools and resources to support her educational journey.",
     },
     {
       icon: HeartHandshake,
       title: "Fund a counselling session",
-      description: "Support mental health and personal development through professional guidance.",
+      description:
+        "Support mental health and personal development through professional guidance.",
     },
     {
       icon: Users,
       title: "Volunteer as a mentor",
-      description: "Share your knowledge and experience to guide the next generation of leaders.",
+      description:
+        "Share your knowledge and experience to guide the next generation of leaders.",
     },
     {
       icon: Briefcase,
       title: "Support a startup dream",
-      description: "Help turn entrepreneurial dreams into reality with your financial backing.",
+      description:
+        "Help turn entrepreneurial dreams into reality with your financial backing.",
     },
     {
       icon: BookMarked,
       title: "Teach a skill",
-      description: "Empower girls with practical skills that can transform their future career opportunities.",
+      description:
+        "Empower girls with practical skills that can transform their future career opportunities.",
     },
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-gray-50 via-white to-pink-50"
-    >
+    <section ref={sectionRef} className="py-20  ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
@@ -87,16 +99,18 @@ const Donate = () => {
             variants={itemVariants}
             className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6"
           >
-            Support a Girl. <span className="text-[#c8335a]">Empower Her Future.</span>
+            Support a Girl.{" "}
+            <span className="text-[#c8335a]">Empower Her Future.</span>
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
             className="text-xl text-gray-600 max-w-4xl mx-auto mb-12"
           >
-            Every girl deserves a chance to rise — and your support can make that possible. 
-            Whether through scholarships, mentorship, counselling, learning materials, or 
-            volunteering your time, your contribution creates lasting change in the life of a girl.
+            Every girl deserves a chance to rise — and your support can make
+            that possible. Whether through scholarships, mentorship,
+            counselling, learning materials, or volunteering your time, your
+            contribution creates lasting change in the life of a girl.
           </motion.p>
         </motion.div>
 
@@ -115,7 +129,9 @@ const Donate = () => {
               <div className="w-12 h-12 rounded-full bg-[#c8335a]/10 flex items-center justify-center mb-4 text-[#c8335a]">
                 <option.icon className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">{option.title}</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                {option.title}
+              </h3>
               <p className="text-gray-600">{option.description}</p>
             </motion.div>
           ))}
@@ -125,12 +141,12 @@ const Donate = () => {
           variants={itemVariants}
           className="flex flex-col sm:flex-row justify-center gap-6 mt-12"
         >
-          <button className="px-12 py-4 bg-[#c8335a] text-white font-semibold rounded-full hover:bg-[#a82a4a] transition-colors duration-300 text-lg">
+          <Button variant="primary" size="lg" className="px-12 py-4">
             Become a Supporter
-          </button>
-          <button className="px-12 py-4 bg-white text-[#c8335a] font-semibold rounded-full border-2 border-[#c8335a] hover:bg-[#c8335a]/5 transition-colors duration-300 text-lg">
+          </Button>
+          <Button variant="outline" size="lg" className="px-12 py-4">
             Donate
-          </button>
+          </Button>
         </motion.div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { Star, Sparkles, Calendar, Users, Award, Check } from "lucide-react";
 import React, { useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 const Upcoming = () => {
   const sectionRef = useRef(null);
@@ -41,10 +42,7 @@ const Upcoming = () => {
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-gray-50 via-white to-pink-50"
-    >
+    <section ref={sectionRef} className="py-20  ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
@@ -148,7 +146,10 @@ const Upcoming = () => {
           </motion.div>
         </div>
 
-        <motion.div variants={itemVariants} className="mt-16 text-center">
+        <motion.div
+          variants={itemVariants}
+          className="mt-16 text-center flex flex-col items-center"
+        >
           <h3 className="text-3xl font-bold text-gray-900 mb-6">
             From <span className="text-[#c8335a]">Potential</span> to{" "}
             <span className="text-[#c8335a]">Power</span>
@@ -156,14 +157,16 @@ const Upcoming = () => {
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
             This is your moment. This is your movement.
           </p>
-          <button
-            className="mt-8 px-8 py-4 bg-[#c8335a] text-white font-semibold rounded-full hover:bg-[#a82a4a] transition-colors duration-300"
+          <Button
+            variant="primary"
+            size="lg"
+            className="mt-8 px-8 py-4"
             onClick={() =>
               router.push("https://tinyurl.com/AfriGirlLeadsApplication")
             }
           >
             Apply Now
-          </button>
+          </Button>
         </motion.div>
       </div>
     </section>

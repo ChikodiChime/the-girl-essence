@@ -2,6 +2,7 @@
 import { motion, useInView, Variants } from "framer-motion";
 import { Heart, MessageCircle, MapPin, Lock, Calendar } from "lucide-react";
 import React, { useRef } from "react";
+import { Button } from "@/components/ui/Button";
 
 const Book = () => {
   const sectionRef = useRef(null);
@@ -78,13 +79,14 @@ const Book = () => {
           >
             Need a listening ear? You're not alone.
           </motion.p>
-          
+
           <motion.p
             variants={itemVariants}
             className="text-lg text-gray-600 max-w-3xl mx-auto mb-12"
           >
-            We provide confidential, supportive counselling sessions for girls navigating 
-            personal challenges, mental health concerns, family struggles, or life decisions.
+            We provide confidential, supportive counselling sessions for girls
+            navigating personal challenges, mental health concerns, family
+            struggles, or life decisions.
           </motion.p>
         </motion.div>
 
@@ -97,10 +99,10 @@ const Book = () => {
           >
             <motion.div variants={itemVariants}>
               <p className="text-lg text-gray-700 mb-8">
-                Whether it's one conversation or ongoing support, our trained counsellors 
-                are here to help — without judgment.
+                Whether it's one conversation or ongoing support, our trained
+                counsellors are here to help — without judgment.
               </p>
-              
+
               <div className="space-y-4">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-start gap-4">
@@ -117,14 +119,13 @@ const Book = () => {
               <p className="text-lg font-medium text-gray-900 mb-6">
                 Take the first step toward healing and growth.
               </p>
-              <button className="px-12 py-4 bg-[#c8335a] text-white font-semibold rounded-full hover:bg-[#a82a4a] transition-colors duration-300 text-lg flex items-center gap-2 mx-auto">
-                <Calendar className="w-5 h-5" />
+              <Button leftIcon={<Calendar className="w-5 h-5" />}>
                 Book a Session Now
-              </button>
+              </Button>
             </motion.div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="relative h-full min-h-[400px] rounded-2xl overflow-hidden bg-gradient-to-br from-[#c8335a]/5 to-pink-100 flex items-center justify-center p-8"
           >
@@ -132,10 +133,13 @@ const Book = () => {
               <div className="w-20 h-20 rounded-full bg-[#c8335a]/10 flex items-center justify-center mx-auto mb-6">
                 <MessageCircle className="w-10 h-10 text-[#c8335a]" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Safe Space to Share</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Safe Space to Share
+              </h3>
               <p className="text-gray-600">
-                Our counsellors provide a warm, non-judgmental environment where you can 
-                freely express yourself and work through challenges at your own pace.
+                Our counsellors provide a warm, non-judgmental environment where
+                you can freely express yourself and work through challenges at
+                your own pace.
               </p>
             </div>
           </motion.div>

@@ -4,6 +4,8 @@ import Upcoming from "@/components/blocks/landing-page/Upcoming";
 import Donate from "@/components/blocks/landing-page/Donate";
 import Book from "@/components/blocks/landing-page/Book";
 import Testimonial from "@/components/blocks/landing-page/Testimonial";
+import Partners from "@/components/blocks/landing-page/Partners";
+import Contact from "@/components/blocks/landing-page/Contact";
 
 export default function Home() {
   return (
@@ -14,6 +16,8 @@ export default function Home() {
       <Donate />
       <Book/>
       <Testimonial/>
+      <Partners/>
+      <Contact/>
     </div>
   );
 }
