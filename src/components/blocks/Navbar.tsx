@@ -3,31 +3,60 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Button } from "../ui/Button";
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Partners", href: "/partners" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: "#hero" },
+  { name: "About", href: "#about" },
+  { name: "Programs", href: "#programs" },
+  { name: "Gallery", href: "#gallery" },
+  { name: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeLink, setActiveLink] = useState("/");
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
+
+      // Update active section based on scroll position
+      const sections = navLinks.map((link) => link.href.replace("#", ""));
+      for (const section of sections.reverse()) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 150) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLinkClick = (href: any) => {
-    setActiveLink(href);
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    e.preventDefault();
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+    if (element) {
+      const navHeight = 80;
+      const elementPosition =
+        element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: elementPosition - navHeight,
+        behavior: "smooth",
+      });
+    }
     setMenuOpen(false);
+    setActiveSection(targetId);
   };
 
   return (
@@ -40,186 +69,213 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
           />
         )}
       </AnimatePresence>
 
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white shadow-lg border-b border-gray-200/50"
-            : "bg-white backdrop-blur-sm"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled ? "py-2" : "py-4"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 lg:h-18">
-            {/* Logo with enhanced hover effect */}
+        <div
+          className={`max-w-6xl lg:mx-auto px-4 sm:px-6 transition-all duration-500 mx-4 `}
+        >
+          <div
+            className={`flex justify-between items-center px-4 lg:px-6 transition-all duration-500 h-16 bg-white backdrop-blur-xl shadow-lg shadow-black/5 rounded-2xl border border-white/20`}
+          >
+            {/* Logo */}
             <motion.a
-              href="/"
-              onClick={() => handleLinkClick("/")}
+              href="#hero"
+              onClick={(e) => handleNavClick(e, "#hero")}
               className="flex items-center gap-3 group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <div className="relative">
-                <Image src="/logo.png" alt="Logo" width={60} height={60} />
-                <div className="absolute inset-0 bg-gradient-to-br from-[#c8335a]/60 to-[#a02847]/60 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm -z-10"></div>
+                <Image
+                  src="/logo.png"
+                  alt="The Girl Essence"
+                  width={scrolled ? 45 : 55}
+                  height={scrolled ? 45 : 55}
+                  className="transition-all duration-300"
+                />
               </div>
-              {/* <div className="hidden sm:block">
-                <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  The Girl Essence
+              <div
+                className={`hidden sm:block transition-all duration-300 ${scrolled ? "opacity-100" : "opacity-0 lg:opacity-100"}`}
+              >
+                <span className="text-lg lg:text-xl font-bold text-gray-900">
+                  The Girl <span className="text-[#c8335a]">Essence</span>
                 </span>
-              </div> */}
+              </div>
             </motion.a>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link, index) => (
-                <motion.div
+                <motion.a
                   key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 + 0.3 }}
+                  className={`relative px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
+                    activeSection === link.href.replace("#", "")
+                      ? "text-[#c8335a]"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <motion.a
-                    href={link.href}
-                    onClick={() => handleLinkClick(link.href)}
-                    className={`relative px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                      activeLink === link.href
-                        ? "text-[#c8335a]"
-                        : "text-gray-700 hover:text-[#c8335a]"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {link.name}
-                    {activeLink === link.href && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 -z-10"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          bounce: 0.2,
-                          duration: 0.6,
-                        }}
-                      />
-                    )}
+                  {link.name}
+                  {activeSection === link.href.replace("#", "") && (
                     <motion.div
-                      className="absolute inset-0 bg-gray-50 rounded-lg opacity-0 -z-10"
-                      whileHover={{ opacity: 1 }}
+                      layoutId="activeNavBg"
+                      className="absolute inset-0 bg-gradient-to-r from-[#c8335a]/10 to-[#c8335a]/5 rounded-xl -z-10 border border-[#c8335a]/20"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
+                    />
+                  )}
+                  {activeSection !== link.href.replace("#", "") && (
+                    <motion.div
+                      className="absolute inset-0 bg-gray-100/0 hover:bg-gray-100/80 rounded-xl -z-10"
+                      initial={false}
                       transition={{ duration: 0.2 }}
                     />
-                  </motion.a>
-                </motion.div>
+                  )}
+                </motion.a>
               ))}
 
-              <Button
-                href="/donate"
-                variant="primary"
-                size="md"
-                className="ml-6"
-                gradientFrom="#c8335a"
-                gradientTo="#a02847"
-                hoverGradientFrom="#a02847"
-                hoverGradientTo="#8b1f3a"
-                shadowColor="rgba(200, 51, 90, 0.4)"
+              <motion.a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 20px 25px -5px rgba(200, 51, 90, 0.3), 0 10px 10px -5px rgba(200, 51, 90, 0.2)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="ml-4 px-6 py-2.5 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#c8335a]/25 hover:shadow-xl hover:shadow-[#c8335a]/30 transition-all duration-300 relative overflow-hidden group"
               >
-                Donate
-              </Button>
+                <span className="relative z-10">Get Involved</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#a02847] to-[#c8335a]"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.a>
             </div>
 
-            {/* Mobile/Tablet Menu Button */}
-            <div className="lg:hidden">
-              <motion.button
-                onClick={() => setMenuOpen(!menuOpen)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="relative w-10 h-10 flex items-center justify-center rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#c8335a] focus:ring-offset-2"
-                aria-label="Toggle menu"
-              >
-                <div className="w-5 h-5 flex flex-col justify-center items-center">
-                  <motion.span
-                    animate={
-                      menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }
-                    }
-                    className="w-5 h-0.5 bg-gray-700 rounded-full transition-all duration-300 origin-center"
-                  />
-                  <motion.span
-                    animate={
-                      menuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }
-                    }
-                    className="w-5 h-0.5 bg-gray-700 rounded-full mt-1.5 transition-all duration-300"
-                  />
-                  <motion.span
-                    animate={
-                      menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }
-                    }
-                    className="w-5 h-0.5 bg-gray-700 rounded-full mt-1.5 transition-all duration-300 origin-center"
-                  />
-                </div>
-              </motion.button>
-            </div>
+            {/* Mobile Menu Button */}
+            <motion.button
+              onClick={() => setMenuOpen(!menuOpen)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100/80 hover:bg-gray-200/80 transition-colors duration-200"
+              aria-label="Toggle menu"
+            >
+              <div className="w-5 h-5 flex flex-col justify-center items-center">
+                <motion.span
+                  animate={
+                    menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }
+                  }
+                  className="w-5 h-0.5 bg-gray-700 rounded-full origin-center"
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.span
+                  animate={
+                    menuOpen
+                      ? { opacity: 0, scaleX: 0 }
+                      : { opacity: 1, scaleX: 1 }
+                  }
+                  className="w-5 h-0.5 bg-gray-700 rounded-full mt-1.5"
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.span
+                  animate={
+                    menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }
+                  }
+                  className="w-5 h-0.5 bg-gray-700 rounded-full mt-1.5 origin-center"
+                  transition={{ duration: 0.2 }}
+                />
+              </div>
+            </motion.button>
           </div>
         </div>
 
-        {/* Mobile/Tablet Menu */}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-200/50 shadow-lg"
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="lg:hidden absolute top-full left-4 right-4 mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
             >
-              <div className="px-4 py-6 space-y-1">
+              <div className="p-4 space-y-1">
                 {navLinks.map((link, index) => (
                   <motion.a
                     key={link.href}
                     href={link.href}
-                    onClick={() => handleLinkClick(link.href)}
+                    onClick={(e) => handleNavClick(e, link.href)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className={`flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      activeLink === link.href
-                        ? "text-[#c8335a] bg-[#c8335a]/5 border-l-4 border-[#c8335a]"
-                        : "text-gray-700 hover:text-[#c8335a] hover:bg-gray-50"
-                    }`}
+                    transition={{ delay: index * 0.05 }}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
+                    className={`flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                      activeSection === link.href.replace("#", "")
+                        ? "text-[#c8335a] bg-gradient-to-r from-[#c8335a]/10 to-[#c8335a]/5 border border-[#c8335a]/20 shadow-sm"
+                        : "text-gray-700 hover:text-[#c8335a] hover:bg-gray-50 hover:shadow-sm"
+                    }`}
                   >
-                    <span className="text-lg">{link.name}</span>
+                    {link.name}
+                    {activeSection === link.href.replace("#", "") && (
+                      <motion.div
+                        className="ml-auto w-1.5 h-1.5 rounded-full bg-[#c8335a]"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", bounce: 0.5 }}
+                      />
+                    )}
                   </motion.a>
                 ))}
 
                 <motion.a
-                  href="/donate"
-                  onClick={() => handleLinkClick("/donate")}
-                  initial={{ opacity: 0, y: 20 }}
+                  href="#contact"
+                  onClick={(e) => handleNavClick(e, "#contact")}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  whileHover={{ scale: 1.02 }}
+                  transition={{ delay: 0.3 }}
                   whileTap={{ scale: 0.98 }}
-                  className="block mt-6 mx-4"
+                  className="block mt-4 px-4 py-3 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold rounded-xl text-center shadow-lg relative overflow-hidden group"
                 >
-                  <div className="px-6 py-3 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-                    Donate Now
-                  </div>
+                  <span className="relative z-10">Get Involved</span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-[#a02847] to-[#c8335a]"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </motion.a>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.nav>
-
-      {/* Spacer to prevent content from hiding behind fixed navbar */}
-      <div className="h-16 lg:h-18"></div>
     </>
   );
 };

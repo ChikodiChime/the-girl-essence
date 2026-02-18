@@ -2,9 +2,18 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/blocks/Navbar";
 import Footer from "@/components/blocks/landing-page/Footer";
+import { Nunito, Cormorant_Garamond } from "next/font/google";
 
+const nunito = Nunito({
+  subsets: ["latin"],
+});
 
-
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+});
 
 export const metadata: Metadata = {
   title: "The Girl Essence",
@@ -19,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased`}
+        className={`antialiased ${nunito.className} ${cormorantGaramond.variable}`}
       >
         <Navbar />
         {children}

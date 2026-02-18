@@ -1,226 +1,153 @@
-/* eslint-disable react/no-unescaped-entities */
-
 "use client";
-import type { StaticImageData } from "next/image";
-import type { Variants } from "framer-motion";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/Button";
+import { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ChevronDown, Sparkles, Heart, Target, Users, ArrowRight } from "lucide-react";
 
-interface Slide {
-  id: number;
-  image: StaticImageData | string;
-}
+export default function EnhancedHero() {
+  const containerRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-export default function HeroSlideshow() {
-  const slides: Slide[] = [
-    { id: 1, image: "/hero1.jpg" },
-    { id: 2, image: "/hero2.jpg" },
-    { id: 3, image: "/hero3.jpg" },
-  ];
-
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [direction, setDirection] = useState<"left" | "right">("right");
+  // Parallax scroll effect for background elements
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      goToNext();
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [currentSlide]);
-
-  const goToNext = () => {
-    setDirection("right");
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  };
-
-  // const goToPrev = () => {
-  //   setDirection("left");
-  //   setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  // };
-
-  const goToSlide = (index: number) => {
-    setDirection(index > currentSlide ? "right" : "left");
-    setCurrentSlide(index);
-  };
-
-  const slideVariants: Variants = {
-    enter: (direction: string) => ({
-      opacity: 1,
-      x: direction === "right" ? "100%" : "-100%",
-    }),
-    center: {
-      opacity: 1,
-      x: 0,
-    },
-    exit: (direction: string) => ({
-      opacity: 1,
-      x: direction === "right" ? "-100%" : "100%",
-    }),
-  };
-
-  const textContainer: Variants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const textItem: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1], // Custom cubic bezier for easeOut
-      },
-    },
-  };
-
-  const highlightItem: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1], // Custom cubic bezier for easeOut
-      },
-    },
-    pulse: {
-      scale: [1, 1.02, 1],
-      transition: {
-        duration: 3,
-        ease: "easeInOut",
-        repeat: Infinity,
-      },
-    },
-  };
-
-  const getImageUrl = (image: StaticImageData | string) => {
-    return typeof image === "string" ? image : image.src;
-  };
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 25,
+        y: (e.clientY / window.innerHeight - 0.5) * 25,
+      });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
-    <div className="relative flex h-screen w-full flex-col justify-center overflow-hidden py-[10vh]">
-      <AnimatePresence custom={direction} initial={false}>
-        <motion.div
-          key={slides[currentSlide].id}
-          animate="center"
-          className="absolute inset-0 h-full w-full"
-          custom={direction}
-          exit="exit"
-          initial="enter"
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          variants={slideVariants}
-        >
-          <div
-            className="h-full w-full bg-cover bg-no-repeat md:bg-center"
-            style={{
-              backgroundImage: `url(${getImageUrl(
-                slides[currentSlide].image
-              )})`,
-            }}
-          />
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/60" />
-        </motion.div>
-      </AnimatePresence>
+    <section
+      ref={containerRef}
+      className="relative min-h-screen w-full overflow-hidden bg-[#fffafb] selection:bg-[#c8335a]/20"
+    >
+      {/* 1. Ethereal Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <motion.div 
+          style={{ y: y1 }}
+          className="absolute -top-[10%] -left-[5%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#fce7f3] to-transparent blur-[120px] opacity-60" 
+        />
+        <motion.div 
+          style={{ y: y2 }}
+          className="absolute top-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tl from-[#ffe4e6] to-transparent blur-[100px] opacity-50" 
+        />
+        
+        {/* Subtle Noise Texture */}
+        <div className="absolute inset-0 opacity-[0.03] contrast-150 brightness-100 mix-blend-multiply pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      </div>
 
-      <div className="relative z-10 px-6 text-white md:px-22">
-        <motion.div animate="show" initial="hidden" variants={textContainer}>
-          <motion.p
-            className="mb-[5vh] w-fit rounded-full bg-white px-1 py-1 text-[9px] font-semibold text-[#c8335a] md:mb-4 md:px-3 md:text-base"
-            variants={textItem}
-          >
-            Non-profit Organisation
-          </motion.p>
-          <motion.h1
-            className={`my-[3vh] text-5xl font-bold md:text-[80px] lg:text-[100px] lg:leading-24`}
-          >
-            <motion.span variants={textItem}>Empowering </motion.span>
-            <motion.span
-              className="text-[#c8335a]"
-              style={{ display: "inline-block" }}
-              variants={highlightItem}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-28 pb-20 min-h-screen flex flex-col justify-center">
+        <div className="grid lg:grid-cols-12 gap-12 items-start">
+          
+          {/* 2. Text Content (Column 1-7) */}
+          <div className="lg:col-span-7 space-y-3">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              Women,
-            </motion.span>{" "}
-            <br />
-            <motion.span variants={textItem}>Transforming Futures.</motion.span>
-          </motion.h1>
-          <motion.p
-            className="mb-8 w-full text-xs md:text-base lg:w-2/3"
-            variants={textItem}
-          >
-            We build wholesome, confident, and intentional women by guiding
-            girls through mentorship, coaching, counselling, and advocacy. By
-            helping them discover their voice and purpose, we’re shaping a
-            generation ready to lead and transform their world — one girl at a
-            time.
-          </motion.p>
-        </motion.div>
-      </div>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c8335a]/5 border border-[#c8335a]/10 text-[#c8335a] text-sm font-bold tracking-wide mb-6 uppercase">
+                <Sparkles className="w-4 h-4" /> Mentorship • Advocacy • Growth
+              </span>
+              
+              <h1 className="text-5xl md:text-7xl font-serif font-medium text-gray-900 leading-[1.1] tracking-tight">
+                Raising <span className="italic font-light">Whole</span>, <br />
+                <span className="relative">
+                  Confident
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 20" fill="none">
+                    <path d="M5 15Q150 5 295 15" stroke="#c8335a" strokeWidth="4" strokeLinecap="round" opacity="0.3"/>
+                  </svg>
+                </span> & <br />
+                <span className="text-[#c8335a]">Purpose-Driven</span> Girls
+              </h1>
+            </motion.div>
 
-      <div className="relative my-[5vh] flex items-center space-x-2 px-6 md:space-x-5 md:px-22">
-       <Button
-       href="/book"
-       variant="secondary"
-       size="md"
-       className=""
-       fullWidth={false}
-       borderRadius="calc(infinity * 1px)"
-      //  gradientFrom="#c8335a"
-      //  gradientTo="#a02847"
-      //  hoverGradientFrom="#a02847"
-      //  hoverGradientTo="#8b1f3a"
-      //  shadowColor="rgba(200, 51, 90, 0.4)"
-     >
-       Book a counselling session
-     </Button>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="text-lg md:text-xl text-gray-600 max-w-xl leading-relaxed font-light"
+            >
+              Empowering young women aged 16–30 to redefine their narrative through 
+              curated mentorship and a community built on authenticity.
+            </motion.p>
 
-        <Button
-          href="/donate"
-          variant="primary"
-          size="md"
-          className=""
-          fullWidth={false}
-          borderRadius="calc(infinity * 1px)"
-          gradientFrom="#c8335a"
-          gradientTo="#a02847"
-          hoverGradientFrom="#a02847"
-          hoverGradientTo="#8b1f3a"
-          shadowColor="rgba(200, 51, 90, 0.4)"
-        >
-          Donate
-        </Button>
-      </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 pt-4"
+            >
+              <button className="group px-8 py-4 bg-[#c8335a] text-white rounded-full font-bold shadow-2xl shadow-[#c8335a]/20 hover:bg-[#a02847] transition-all flex items-center justify-center gap-3">
+                Explore Programs
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button className="px-8 py-4 bg-white text-gray-900 rounded-full font-bold border border-gray-200 hover:border-[#c8335a] hover:text-[#c8335a] transition-all">
+                Get Involved
+              </button>
+            </motion.div>
+          </div>
 
-      <div className="relative z-10 hidden gap-4 px-6 md:flex md:px-22">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            aria-label={`Go to slide ${index + 1}`}
-            className="group relative flex h-4 items-center focus:outline-none"
-            onClick={() => goToSlide(index)}
-          >
-            <div className="h-1 w-12 rounded-lg bg-gray-300/50 transition-colors group-hover:bg-white/80 md:w-16" />
-            {index === currentSlide && (
+          {/* 3. Visual Element (Column 8-12) */}
+          <div className="lg:col-span-5 relative">
+            <motion.div
+              style={{
+                rotateX: mousePosition.y * -0.1,
+                rotateY: mousePosition.x * 0.1,
+              }}
+              className="relative aspect-[4/5] w-full max-w-[450px] mx-auto perspective-1000"
+            >
+              {/* Main Image with refined border radius */}
+              <div className="relative w-full h-[500px] rounded-[60px] lg:rounded-[100px] overflow-hidden shadow-[0_50px_100px_-20px_rgba(200,51,90,0.15)] z-20">
+                <div 
+                  className="w-full h-full bg-cover bg-center transition-transform duration-700 hover:scale-110"
+                  style={{ backgroundImage: "url('/gallery/img25.jpeg')" }} 
+                />
+              </div>
+
+              {/* Glassmorphic Stat Cards */}
               <motion.div
-                className="absolute h-1.5 w-12 rounded-lg bg-white md:w-16"
-                layoutId="activeDash"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
-            )}
-          </button>
-        ))}
+                animate={{ y: [0, -15, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-6 -right-8 z-30 backdrop-blur-md bg-white/80 p-6 rounded-3xl border border-white/50 shadow-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-[#c8335a]/10 rounded-xl">
+                    <Users className="w-6 h-6 text-[#c8335a]" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-gray-900">500+</div>
+                    <div className="text-xs text-gray-500 font-medium">Impacted</div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [0, 15, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-20 -left-12 z-30 backdrop-blur-md bg-white/80 p-6 rounded-3xl border border-white/50 shadow-xl"
+              >
+                <div className="text-3xl font-bold text-[#c8335a]">16-30</div>
+                <div className="text-xs text-gray-500 font-medium uppercase tracking-widest">Age Focus</div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
       </div>
-    </div>
+      
+      {/* 4. Elegant Scroll Indicator */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+        <div className="w-[1px] h-12 bg-gradient-to-b from-[#c8335a] to-transparent" />
+        <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400">Scroll</span>
+      </div>
+    </section>
   );
 }
