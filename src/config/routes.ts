@@ -11,7 +11,7 @@ export const ROUTES = {
   external: {
     instagram: "https://instagram.com/thegirlessence",
     contactEmail: "mailto:thegirlessenceinitiative@gmail.com",
-    infoEmail: "mailto:info@thegirlessence.org",
+    infoEmail: "mailto:thegirlessenceinitiative@gmail.com",
     whatsapp: (phone: string = "+2349016462033") => {
       const cleanPhone = phone.replace(/\D/g, "");
       return `https://wa.me/${cleanPhone}?text=Hi%2C%20I%27d%20like%20to%20get%20involved%20with%20The%20Girl%20Essence.`;
