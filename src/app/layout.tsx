@@ -18,11 +18,40 @@ const cormorantGaramond = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: "The Girl Essence",
-  description: "Raising whole women and shape a better future—one girl at a time",
+  description:
+    "Raising whole women and shape a better future—one girl at a time",
+  metadataBase: new URL("https://the-girl-essence.vercel.app"),
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
     shortcut: "/favicon.png",
     apple: "/favicon.png",
+  },
+  openGraph: {
+    title: "The Girl Essence",
+    description:
+      "Raising whole women and shape a better future—one girl at a time",
+    url: "https://the-girl-essence.vercel.app",
+    siteName: "The Girl Essence",
+    images: [
+      {
+        url: "/logo.png",
+        width: 512,
+        height: 512,
+        alt: "The Girl Essence",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Girl Essence",
+    description:
+      "Raising whole women and shape a better future—one girl at a time",
+    images: ["/logo.png"],
   },
 };
 
