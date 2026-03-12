@@ -327,26 +327,6 @@ const AboutUs = () => {
     },
   ];
 
-  //   Mentorship & Coaching
-
-  // We provide structured mentorship and coaching sessions that address personal development, goal-setting, self-worth, boundaries, leadership, and life skills relevant to today’s young woman.
-
-  // Leadership Development
-
-  // Through programs like AfriGirl Leads, we train young women to develop leadership competence, confidence, and practical experience through projects, trainings, and community engagement.
-
-  // Advocacy & Awareness
-
-  // We advocate for girl-focused issues including education, health, substance abuse prevention, self-esteem, and safe relationships through outreach programs, campaigns, and conversations.
-
-  // Workshops & Trainings
-
-  // We organize physical and virtual workshops covering topics such as personal growth, career readiness, entrepreneurship, digital skills, and emotional intelligence.
-
-  // Community Conversations
-
-  // Our Girl’s Talk Sessions create safe, honest spaces for girls to discuss real-life issues, ask difficult questions, and learn from shared experiences.
-
   const whatWeDo = [
     {
       icon: Users,
@@ -400,7 +380,7 @@ const AboutUs = () => {
       <section
         ref={sectionRef}
         id="about"
-        className="body-font py-28 bg-white relative overflow-hidden"
+        className="body-font py-20 sm:py-24 lg:py-28 bg-white relative overflow-hidden"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         {/* Subtle ambient blobs */}
@@ -410,8 +390,8 @@ const AboutUs = () => {
             position: "absolute",
             top: "-120px",
             right: "-80px",
-            width: "520px",
-            height: "520px",
+            width: "min(520px, 72vw)",
+            height: "min(520px, 72vw)",
             borderRadius: "50%",
             background:
               "radial-gradient(circle, rgba(200,51,90,0.06) 0%, transparent 70%)",
@@ -424,8 +404,8 @@ const AboutUs = () => {
             position: "absolute",
             bottom: "10%",
             left: "-100px",
-            width: "400px",
-            height: "400px",
+            width: "min(400px, 60vw)",
+            height: "min(400px, 60vw)",
             borderRadius: "50%",
             background:
               "radial-gradient(circle, rgba(200,51,90,0.05) 0%, transparent 70%)",
@@ -439,11 +419,11 @@ const AboutUs = () => {
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="text-center mb-24"
+            className="text-center mb-16 sm:mb-20 lg:mb-24"
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-7"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-6 sm:mb-7"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(200,51,90,0.12), rgba(200,51,90,0.06))",
@@ -476,12 +456,13 @@ const AboutUs = () => {
 
             <motion.p
               variants={itemVariants}
+              className="px-1 sm:px-0"
               style={{
-                fontSize: "1.1rem",
+                fontSize: "clamp(0.98rem, 2.8vw, 1.1rem)",
                 color: "#6b5d64",
-                maxWidth: "940px",
+                maxWidth: "56rem",
                 margin: "0 auto",
-                lineHeight: 1.8,
+                lineHeight: 1.75,
                 // textAlign: "justify",
               }}
             >

@@ -49,7 +49,7 @@ const Testimonial = () => {
   const prevTestimonial = () => {
     setDirection(-1);
     setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
   };
 
@@ -105,13 +105,24 @@ const Testimonial = () => {
             Voices of Impact
           </motion.div>
 
-          <motion.h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-            <span className="text-[#c8335a]">Inspiring</span> Stories of Change
+          <motion.h2
+            className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6"
+            style={{
+              fontFamily:
+                "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif",
+              fontSize: "clamp(2.4rem, 6vw, 4rem)",
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Inspiring Stories of{" "}
+            <span className="text-[#c8335a] italic">Change</span>
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
-            className="text-lg text-gray-600 max-w-3xl mx-auto mb-12"
+            className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto mb-10 sm:mb-12"
           >
             Hear from the girls, parents, and mentors who’ve experienced our
             programs firsthand — from moments of breakthrough to journeys of
@@ -137,17 +148,17 @@ const Testimonial = () => {
                   x: { type: "spring", stiffness: 300, damping: 30 },
                   opacity: { duration: 0.2 },
                 }}
-                className="bg-white p-8 rounded-2xl shadow-md border border-gray-100"
+                className="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-gray-100"
               >
                 <Quote className="w-8 h-8 text-[#c8335a] opacity-20 mb-4" />
-                <p className="text-xl text-gray-700 mb-6 italic">
+                <p className="text-lg sm:text-xl text-gray-700 mb-6 italic leading-relaxed">
                   "{testimonials[currentIndex].quote}"
                 </p>
                 <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-[#c8335a]/10 flex items-center justify-center text-[#c8335a] font-bold text-lg mr-4">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#c8335a]/10 flex items-center justify-center text-[#c8335a] font-bold text-base sm:text-lg mr-3 sm:mr-4">
                     {testimonials[currentIndex].author.charAt(0)}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold text-gray-900">
                       {testimonials[currentIndex].author}
                     </p>
@@ -162,22 +173,24 @@ const Testimonial = () => {
             </AnimatePresence>
           </div>
 
-          <button
-            onClick={prevTestimonial}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-[#c8335a] hover:text-white transition-colors"
-            aria-label="Previous testimonial"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={nextTestimonial}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-[#c8335a] hover:text-white transition-colors"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          <div className="mt-5 flex items-center justify-between gap-4 sm:mt-0 sm:block">
+            <button
+              onClick={prevTestimonial}
+              className="sm:absolute sm:-left-4 sm:top-1/2 sm:-translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-[#c8335a] hover:text-white transition-colors"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={nextTestimonial}
+              className="sm:absolute sm:-right-4 sm:top-1/2 sm:-translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-[#c8335a] hover:text-white transition-colors"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
 
-          <div className="flex justify-center mt-8 space-x-2">
+          <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
             {testimonials.map((_, index) => (
               <button
                 key={index}

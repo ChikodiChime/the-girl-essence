@@ -33,9 +33,9 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="mb-24"
+      className="mb-20 sm:mb-24"
     >
-      <motion.div variants={variants} className="text-center mb-14">
+      <motion.div variants={variants} className="text-center mb-10 sm:mb-14">
         <h3
           className="section-title mb-3"
           style={{
@@ -45,8 +45,7 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({
             letterSpacing: "-0.01em",
           }}
         >
-          What We{" "}
-          <em style={{ color: "#c8335a", fontStyle: "italic" }}>Do</em>
+          What We <em style={{ color: "#c8335a", fontStyle: "italic" }}>Do</em>
         </h3>
         <p
           style={{
@@ -54,6 +53,7 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({
             maxWidth: "560px",
             margin: "0 auto",
             lineHeight: 1.7,
+            fontSize: "clamp(0.92rem, 2.4vw, 1rem)",
           }}
         >
           Our work blends mentorship, advocacy, leadership development, and
@@ -61,12 +61,12 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {items.map((item) => (
           <motion.div
             key={item.title}
             variants={variants}
-            className="wwd-card rounded-2xl p-7 bg-white"
+            className="wwd-card rounded-2xl p-5 sm:p-6 lg:p-7 bg-white"
             style={{
               border: "1.5px solid #f0eaed",
               boxShadow: "0 2px 12px rgba(26,17,24,0.04)",
@@ -82,7 +82,7 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({
             </div>
             <h4
               style={{
-                fontSize: "1.05rem",
+                fontSize: "clamp(1rem, 2.8vw, 1.05rem)",
                 fontWeight: 700,
                 color: "#1a1118",
                 marginBottom: "8px",
@@ -92,7 +92,7 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({
             </h4>
             <p
               style={{
-                fontSize: "0.875rem",
+                fontSize: "clamp(0.84rem, 2.4vw, 0.875rem)",
                 color: "#7a6c73",
                 lineHeight: 1.72,
               }}

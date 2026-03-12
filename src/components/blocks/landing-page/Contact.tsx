@@ -9,10 +9,12 @@ import {
   Handshake,
   Heart,
   GraduationCap,
-  Instagram,
   ArrowUpRight,
+  Instagram,
 } from "lucide-react";
 import React, { useState, useRef } from "react";
+import { toast } from "sonner";
+import { ROUTES } from "@/config/routes";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -20,118 +22,139 @@ const styles = `
 
   .section-title { font-family: 'Cormorant Garamond', Georgia, serif; }
 
-  /* ── Involvement rows ── */
-  .inv-row {
+  /* ── Involvement cards (horizontal top row) ── */
+  .inv-card {
     display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 0;
-    cursor: pointer;
-    text-decoration: none;
-    position: relative;
-    transition: padding-left 0.35s cubic-bezier(0.34,1.4,0.64,1);
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 16px;
+    background: #faf8f9;
+    border: 1.5px solid #ede4e9;
+    transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1),
+                box-shadow 0.35s ease,
+                border-color 0.3s ease;
   }
-  .inv-row::before {
-    content: '';
-    position: absolute;
-    left: -20px; top: 8px; bottom: 8px;
-    width: 2.5px;
-    background: linear-gradient(180deg, #c8335a, #7c1933);
-    border-radius: 99px;
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: opacity 0.2s ease, transform 0.38s cubic-bezier(0.34,1.4,0.64,1) 0.05s;
+  .inv-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(200,51,90,0.12);
+    border-color: rgba(200,51,90,0.2);
   }
-  .inv-row:hover { padding-left: 6px; }
-  .inv-row:hover::before { opacity: 1; transform: scaleY(1); }
 
-  .inv-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
+  .inv-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(200,51,90,0.1);
+    border: 1px solid rgba(200,51,90,0.15);
     display: flex; align-items: center; justify-content: center;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    flex-shrink: 0;
-    transition: background 0.3s ease, border-color 0.3s ease,
-                transform 0.4s cubic-bezier(0.34,1.4,0.64,1),
-                box-shadow 0.3s ease;
+    transition: background 0.3s ease, transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
   }
-  .inv-icon svg { color: rgba(255,255,255,0.7); transition: color 0.3s ease; }
-  .inv-row:hover .inv-icon {
-    background: rgba(200,51,90,0.28);
-    border-color: rgba(200,51,90,0.35);
-    transform: rotate(-6deg) scale(1.1);
-    box-shadow: 0 4px 16px rgba(200,51,90,0.3);
+  .inv-card-icon svg { color: #c8335a; transition: color 0.3s ease; }
+  .inv-card:hover .inv-card-icon {
+    background: rgba(200,51,90,0.18);
+    transform: rotate(-6deg) scale(1.08);
   }
-  .inv-row:hover .inv-icon svg { color: #f4a0b5; }
 
-  .inv-text-title {
+  .inv-card-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.05rem;
     font-weight: 700;
-    color: white;
+    color: #1a1118;
     line-height: 1.2;
-    transition: color 0.25s ease;
   }
-  .inv-row:hover .inv-text-title { color: #f4a0b5; }
 
-  .inv-text-desc {
-    font-size: 0.78rem;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.5;
-    transition: color 0.25s ease;
+  .inv-card-desc {
+    font-size: 0.82rem;
+    color: #7a6c73;
+    line-height: 1.6;
   }
-  .inv-row:hover .inv-text-desc { color: rgba(255,255,255,0.65); }
 
-  .inv-arrow {
-    margin-left: auto;
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.12);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+  /* ── Contact action buttons ── */
+  .contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    text-decoration: none;
     transition: background 0.3s ease, border-color 0.3s ease,
                 transform 0.4s cubic-bezier(0.34,1.4,0.64,1),
                 box-shadow 0.3s ease;
-  }
-  .inv-arrow svg { color: rgba(255,255,255,0.4); transition: color 0.25s ease; width: 13px; height: 13px; }
-  .inv-row:hover .inv-arrow {
-    background: #c8335a;
-    border-color: #c8335a;
-    transform: rotate(42deg) scale(1.08);
-    box-shadow: 0 4px 14px rgba(200,51,90,0.4);
-  }
-  .inv-row:hover .inv-arrow svg { color: white; }
-
-  .inv-divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent);
+    border: 1.5px solid;
   }
 
-  /* ── Contact info items ── */
-  .cinfo-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
+  .contact-btn.whatsapp {
+    background: rgba(37,211,102,0.06);
+    border-color: rgba(37,211,102,0.18);
   }
-  .cinfo-item:hover { opacity: 0.75; }
+  .contact-btn.whatsapp:hover {
+    background: rgba(37,211,102,0.12);
+    border-color: rgba(37,211,102,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(37,211,102,0.2);
+  }
 
-  .cinfo-icon {
-    width: 36px; height: 36px;
-    border-radius: 9px;
-    background: rgba(200,51,90,0.18);
-    border: 1px solid rgba(200,51,90,0.25);
+  .contact-btn.email {
+    background: rgba(200,51,90,0.06);
+    border-color: rgba(200,51,90,0.18);
+  }
+  .contact-btn.email:hover {
+    background: rgba(200,51,90,0.12);
+    border-color: rgba(200,51,90,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(200,51,90,0.2);
+  }
+
+  .contact-btn.instagram {
+    background: rgba(193,53,132,0.06);
+    border-color: rgba(193,53,132,0.18);
+  }
+  .contact-btn.instagram:hover {
+    background: rgba(193,53,132,0.12);
+    border-color: rgba(193,53,132,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(193,53,132,0.2);
+  }
+
+  .contact-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    transition: background 0.25s ease, transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
+    transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
   }
-  .cinfo-icon svg { color: #f4a0b5; }
-  .cinfo-item:hover .cinfo-icon {
-    background: rgba(200,51,90,0.3);
-    transform: scale(1.1);
+  .contact-btn:hover .contact-icon { transform: scale(1.1) rotate(-5deg); }
+
+  .contact-btn.whatsapp .contact-icon { background: rgba(37,211,102,0.15); }
+  .contact-btn.email .contact-icon { background: rgba(200,51,90,0.15); }
+  .contact-btn.instagram .contact-icon { background: rgba(193,53,132,0.15); }
+
+  .contact-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .contact-btn.whatsapp .contact-label { color: #15803d; }
+  .contact-btn.email .contact-label { color: #a02847; }
+  .contact-btn.instagram .contact-label { color: #a8226e; }
+
+  .contact-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #1a1118;
+  }
+
+  .contact-arrow {
+    margin-left: auto;
+    color: #b8a8b0;
+    transition: color 0.3s ease, transform 0.35s ease;
+    flex-shrink: 0;
+  }
+  .contact-btn:hover .contact-arrow {
+    color: #7a6c73;
+    transform: translateX(3px);
   }
 
   /* ── Form inputs ── */
@@ -140,18 +163,17 @@ const styles = `
     padding: 13px 16px;
     border-radius: 12px;
     border: 1.5px solid #ede4e9;
-    background: #faf8f9;
+    background: white;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.9rem;
     color: #1a1118;
     outline: none;
-    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
     resize: none;
   }
   .form-input::placeholder { color: #b8a8b0; }
   .form-input:focus {
     border-color: #c8335a;
-    background: white;
     box-shadow: 0 0 0 3px rgba(200,51,90,0.08);
   }
 
@@ -193,25 +215,6 @@ const styles = `
   }
   .submit-btn:active:not(:disabled) { transform: scale(0.98); }
   .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
-
-  /* ── Instagram link ── */
-  .ig-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    text-decoration: none;
-    transition: background 0.25s ease, border-color 0.25s ease,
-                transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
-  }
-  .ig-link:hover {
-    background: rgba(200,51,90,0.18);
-    border-color: rgba(200,51,90,0.28);
-    transform: translateX(4px);
-  }
 `;
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -219,66 +222,82 @@ const involvementOptions = [
   {
     icon: Users,
     title: "Become a Mentor",
-    description: "Share your experience and guide young women on their journey.",
-    href: "#",
+    description: "Share your experience and guide young women.",
   },
   {
     icon: Handshake,
     title: "Partner With Us",
-    description: "Collaborate on programs and outreach initiatives.",
-    href: "#",
+    description: "Collaborate on programs and initiatives.",
   },
   {
     icon: Heart,
     title: "Support & Sponsor",
-    description: "Fund our initiatives and help us reach more girls.",
-    href: "#",
+    description: "Fund our work and help us reach more girls.",
   },
   {
     icon: GraduationCap,
     title: "Join Our Sessions",
-    description: "Participate in trainings, workshops, and events.",
-    href: "#",
+    description: "Participate in trainings and events.",
   },
 ];
 
+const WHATSAPP_PHONE = ROUTES.contactInfo.whatsappPhone;
+const WHATSAPP_HREF = ROUTES.external.whatsapp();
+
 // ─── Component ────────────────────────────────────────────────────────────────
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
   };
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-  };
-  const rowVariants: Variants = {
-    hidden: { opacity: 0, x: -16 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    },
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus("idle");
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setSubmitStatus("success");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed");
+      toast.success("Message sent!", {
+        description: "Thank you for reaching out. We'll get back to you soon.",
+      });
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch {
-      setSubmitStatus("error");
+      toast.error("Something went wrong", {
+        description: "Your message could not be sent. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -291,26 +310,57 @@ const Contact = () => {
       <section
         ref={sectionRef}
         id="contact"
-        className="py-28 bg-white relative overflow-hidden"
+        className="py-20 sm:py-24 lg:py-28 bg-white relative overflow-hidden"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         {/* Ambient blobs */}
-        <div aria-hidden style={{ position: "absolute", top: "-80px", left: "-80px", width: "420px", height: "420px", borderRadius: "50%", background: "radial-gradient(circle, rgba(200,51,90,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <div aria-hidden style={{ position: "absolute", bottom: "-60px", right: "-60px", width: "320px", height: "320px", borderRadius: "50%", background: "radial-gradient(circle, rgba(200,51,90,0.04) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: "-80px",
+            left: "-80px",
+            width: "420px",
+            height: "420px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(200,51,90,0.05) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            bottom: "-60px",
+            right: "-60px",
+            width: "320px",
+            height: "320px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(200,51,90,0.04) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
           {/* ── Section header ── */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-7"
-              style={{ background: "linear-gradient(135deg, rgba(200,51,90,0.12), rgba(200,51,90,0.06))", color: "#c8335a", border: "1px solid rgba(200,51,90,0.2)", letterSpacing: "0.03em" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-6 sm:mb-7"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(200,51,90,0.12), rgba(200,51,90,0.06))",
+                color: "#c8335a",
+                border: "1px solid rgba(200,51,90,0.2)",
+                letterSpacing: "0.03em",
+              }}
             >
               <MessageCircle className="w-3.5 h-3.5" />
               Get Involved
@@ -319,222 +369,374 @@ const Contact = () => {
             <motion.h2
               variants={itemVariants}
               className="section-title mb-5"
-              style={{ fontSize: "clamp(2.6rem, 6vw, 4.5rem)", fontWeight: 700, color: "#1a1118", lineHeight: 1.1, letterSpacing: "-0.01em" }}
+              style={{
+                fontSize: "clamp(2.6rem, 6vw, 4.5rem)",
+                fontWeight: 700,
+                color: "#1a1118",
+                lineHeight: 1.1,
+                letterSpacing: "-0.01em",
+              }}
             >
               Join{" "}
-              <em style={{ color: "#c8335a", fontStyle: "italic" }}>Our Movement</em>
+              <em style={{ color: "#c8335a", fontStyle: "italic" }}>
+                Our Movement
+              </em>
             </motion.h2>
 
             <motion.p
               variants={itemVariants}
-              style={{ fontSize: "1.05rem", color: "#6b5d64", maxWidth: "580px", margin: "0 auto", lineHeight: 1.8 }}
+              style={{
+                fontSize: "clamp(0.96rem, 2.8vw, 1.05rem)",
+                color: "#6b5d64",
+                maxWidth: "580px",
+                margin: "0 auto",
+                lineHeight: 1.8,
+              }}
             >
-              There are many ways to be part of The Girl Essence. Whether you want
-              to mentor, partner, support, or participate—we'd love to have you.
+              There are many ways to be part of The Girl Essence. Choose how
+              you'd like to connect with us below.
             </motion.p>
           </motion.div>
 
-          {/* ── Main split layout ── */}
-          <div className="grid lg:grid-cols-5 gap-6 items-start">
-
-            {/* ── LEFT: Dark panel ── */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              className="lg:col-span-2 rounded-3xl overflow-hidden relative"
-              style={{
-                background: "#1a1118",
-                border: "1.5px solid #2a1e24",
-                padding: "40px 36px",
-              }}
-            >
-              {/* Background glows */}
-              <div aria-hidden style={{ position: "absolute", top: "-60px", right: "-60px", width: "260px", height: "260px", borderRadius: "50%", background: "radial-gradient(circle, rgba(200,51,90,0.14), transparent 70%)", pointerEvents: "none" }} />
-              <div aria-hidden style={{ position: "absolute", bottom: "-40px", left: "-40px", width: "200px", height: "200px", borderRadius: "50%", background: "radial-gradient(circle, rgba(200,51,90,0.08), transparent 70%)", pointerEvents: "none" }} />
-
-              <div className="relative z-10">
-                {/* Heading */}
-                <motion.div variants={itemVariants} className="mb-10">
-                  <p style={{ color: "#c8335a", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "8px" }}>
-                    Ways to connect
-                  </p>
-                  <h3
-                    className="section-title"
-                    style={{ fontSize: "clamp(1.7rem, 3vw, 2.3rem)", fontWeight: 700, color: "white", lineHeight: 1.15, letterSpacing: "-0.01em" }}
+          {/* ── Ways to get involved (horizontal cards) ── */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="mb-16"
+          >
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {involvementOptions.map((opt) => {
+                const Icon = opt.icon;
+                return (
+                  <motion.div
+                    key={opt.title}
+                    variants={itemVariants}
+                    className="inv-card"
                   >
-                    Get{" "}
-                    <em style={{ color: "#c8335a", fontStyle: "italic" }}>Involved</em>
-                  </h3>
-                </motion.div>
-
-                {/* Involvement rows */}
-                <div style={{ paddingLeft: "20px", marginBottom: "36px" }}>
-                  {involvementOptions.map((opt, i) => {
-                    const Icon = opt.icon;
-                    return (
-                      <React.Fragment key={opt.title}>
-                        <motion.a
-                          href={opt.href}
-                          className="inv-row"
-                          variants={rowVariants}
-                        >
-                          <div className="inv-icon">
-                            <Icon className="w-4 h-4" />
-                          </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className="inv-text-title">{opt.title}</div>
-                            <div className="inv-text-desc">{opt.description}</div>
-                          </div>
-                          <div className="inv-arrow">
-                            <ArrowUpRight />
-                          </div>
-                        </motion.a>
-                        {i < involvementOptions.length - 1 && <div className="inv-divider" />}
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-
-                {/* Divider */}
-                <div style={{ height: "1px", background: "rgba(255,255,255,0.07)", marginBottom: "28px" }} />
-
-                {/* Contact info */}
-                <motion.div variants={itemVariants} className="space-y-4 mb-8">
-                  <a href="mailto:info@thegirlessence.org" className="cinfo-item">
-                    <div className="cinfo-icon">
-                      <Mail className="w-4 h-4" />
+                    <div className="inv-card-icon">
+                      <Icon className="w-4 h-4" />
                     </div>
                     <div>
-                      <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "1px" }}>Email</div>
-                      <div style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>info@thegirlessence.org</div>
+                      <div className="inv-card-title">{opt.title}</div>
+                      <div className="inv-card-desc">{opt.description}</div>
                     </div>
-                  </a>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
 
-                  <div className="cinfo-item" style={{ cursor: "default" }}>
-                    <div className="cinfo-icon">
-                      <MapPin className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "1px" }}>Location</div>
-                      <div style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>Nigeria</div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Instagram link */}
-                <motion.a
-                  variants={itemVariants}
-                  href="https://instagram.com/thegirlessence"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ig-link"
-                >
-                  <div style={{ width: "34px", height: "34px", borderRadius: "9px", background: "rgba(200,51,90,0.2)", border: "1px solid rgba(200,51,90,0.3)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <Instagram className="w-4 h-4" style={{ color: "#f4a0b5" }} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.35)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "1px" }}>Instagram</div>
-                    <div style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>@thegirlessence</div>
-                  </div>
-                  <ArrowUpRight className="w-4 h-4" style={{ color: "rgba(255,255,255,0.3)", flexShrink: 0 }} />
-                </motion.a>
-              </div>
-            </motion.div>
-
-            {/* ── RIGHT: Form panel ── */}
+          {/* ── Contact methods + Form ── */}
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+            {/* LEFT: Contact methods */}
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate={isInView ? "visible" : "hidden"}
-              className="lg:col-span-3 rounded-3xl"
-              style={{ background: "#faf8f9", border: "1.5px solid #ede4e9", padding: "40px 40px" }}
+              className="space-y-4"
             >
-              <motion.div variants={itemVariants} className="mb-10">
-                <p style={{ color: "#c8335a", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "8px" }}>
-                  Reach out
+              <motion.div variants={itemVariants}>
+                <p
+                  style={{
+                    color: "#c8335a",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Contact us
                 </p>
                 <h3
                   className="section-title"
-                  style={{ fontSize: "clamp(1.7rem, 3vw, 2.3rem)", fontWeight: 700, color: "#1a1118", lineHeight: 1.15, letterSpacing: "-0.01em" }}
+                  style={{
+                    fontSize: "clamp(1.7rem, 3vw, 2.3rem)",
+                    fontWeight: 700,
+                    color: "#1a1118",
+                    lineHeight: 1.15,
+                    letterSpacing: "-0.01em",
+                    marginBottom: "6px",
+                  }}
                 >
-                  Send Us a{" "}
-                  <em style={{ color: "#c8335a", fontStyle: "italic" }}>Message</em>
+                  Get in{" "}
+                  <em style={{ color: "#c8335a", fontStyle: "italic" }}>
+                    Touch
+                  </em>
                 </h3>
-                <p style={{ color: "#6b5d64", fontSize: "0.9rem", marginTop: "8px", lineHeight: 1.7 }}>
-                  Have questions? We'd love to hear from you.
+                <p
+                  style={{
+                    color: "#6b5d64",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Ready to connect? Choose your preferred method below.
                 </p>
               </motion.div>
 
-              {/* Status messages */}
-              {submitStatus === "success" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{ marginBottom: "20px", padding: "14px 18px", background: "rgba(34,197,94,0.08)", color: "#15803d", borderRadius: "12px", border: "1.5px solid rgba(34,197,94,0.2)", fontSize: "0.88rem", fontWeight: 500 }}
+              {/* WhatsApp */}
+              <motion.a
+                variants={itemVariants}
+                href={WHATSAPP_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-btn whatsapp"
+              >
+                <div className="contact-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    style={{ width: "20px", height: "20px", color: "#25d366" }}
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L.057 23.428a.75.75 0 0 0 .916.916l5.573-1.471A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.693 9.693 0 0 1-4.953-1.357l-.355-.21-3.683.972.983-3.595-.23-.37A9.693 9.693 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z" />
+                  </svg>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="contact-label">Chat on WhatsApp</div>
+                  <div className="contact-text break-all">{WHATSAPP_PHONE}</div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 contact-arrow" />
+              </motion.a>
+
+              {/* Email */}
+              <motion.a
+                variants={itemVariants}
+                href={ROUTES.external.contactEmail}
+                className="contact-btn email"
+              >
+                <div className="contact-icon">
+                  <Mail className="w-5 h-5" style={{ color: "#c8335a" }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="contact-label">Send us an email</div>
+                  <div className="contact-text break-all">
+                    {ROUTES.contactInfo.contactEmailAddress}
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 contact-arrow" />
+              </motion.a>
+
+              {/* Instagram */}
+              <motion.a
+                variants={itemVariants}
+                href={ROUTES.external.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-btn instagram"
+              >
+                <div className="contact-icon">
+                  <Instagram className="w-5 h-5" style={{ color: "#c13584" }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="contact-label">Follow on Instagram</div>
+                  <div className="contact-text break-all">
+                    {ROUTES.contactInfo.instagramHandle}
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 contact-arrow" />
+              </motion.a>
+
+              {/* Location */}
+              <motion.div
+                variants={itemVariants}
+                className="pt-4 flex items-center gap-3"
+                style={{ borderTop: "1px solid #ede4e9" }}
+              >
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "10px",
+                    background: "rgba(200,51,90,0.08)",
+                    border: "1px solid rgba(200,51,90,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
                 >
-                  ✓ Thank you! We'll get back to you soon.
-                </motion.div>
-              )}
-              {submitStatus === "error" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{ marginBottom: "20px", padding: "14px 18px", background: "rgba(239,68,68,0.07)", color: "#b91c1c", borderRadius: "12px", border: "1.5px solid rgba(239,68,68,0.18)", fontSize: "0.88rem", fontWeight: 500 }}
+                  <MapPin className="w-4 h-4" style={{ color: "#c8335a" }} />
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontSize: "0.72rem",
+                      color: "#b8a8b0",
+                      fontWeight: 600,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      marginBottom: "2px",
+                    }}
+                  >
+                    Based in
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "0.9rem",
+                      color: "#1a1118",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Nigeria
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* RIGHT: Contact form */}
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              className="rounded-3xl"
+              style={{
+                background: "#faf8f9",
+                border: "1.5px solid #ede4e9",
+                padding: "24px",
+              }}
+            >
+              <motion.div variants={itemVariants} className="mb-8">
+                <p
+                  style={{
+                    color: "#c8335a",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    marginBottom: "8px",
+                  }}
                 >
-                  Something went wrong. Please try again.
-                </motion.div>
-              )}
+                  Send a message
+                </p>
+                <h3
+                  className="section-title"
+                  style={{
+                    fontSize: "clamp(1.7rem, 3vw, 2.3rem)",
+                    fontWeight: 700,
+                    color: "#1a1118",
+                    lineHeight: 1.15,
+                    letterSpacing: "-0.01em",
+                    marginBottom: "6px",
+                  }}
+                >
+                  Contact{" "}
+                  <em style={{ color: "#c8335a", fontStyle: "italic" }}>
+                    Form
+                  </em>
+                </h3>
+                <p
+                  style={{
+                    color: "#6b5d64",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Prefer to write? Fill out the form and we'll respond soon.
+                </p>
+              </motion.div>
 
               <form onSubmit={handleSubmit}>
-                <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <motion.div
+                  variants={itemVariants}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4"
+                >
                   <div>
-                    <label htmlFor="name" className="form-label">Your Name</label>
+                    <label htmlFor="name" className="form-label">
+                      Your Name
+                    </label>
                     <input
-                      type="text" id="name" name="name"
-                      value={formData.name} onChange={handleChange}
-                      required placeholder="Jane Doe"
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Jane Doe"
                       className="form-input"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="form-label">Email Address</label>
+                    <label htmlFor="email" className="form-label">
+                      Email Address
+                    </label>
                     <input
-                      type="email" id="email" name="email"
-                      value={formData.email} onChange={handleChange}
-                      required placeholder="you@example.com"
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="you@example.com"
                       className="form-input"
                     />
                   </div>
                 </motion.div>
 
-                <motion.div variants={itemVariants} style={{ marginBottom: "20px" }}>
-                  <label htmlFor="subject" className="form-label">Subject</label>
+                <motion.div
+                  variants={itemVariants}
+                  style={{ marginBottom: "16px" }}
+                >
+                  <label htmlFor="subject" className="form-label">
+                    Subject
+                  </label>
                   <input
-                    type="text" id="subject" name="subject"
-                    value={formData.subject} onChange={handleChange}
-                    required placeholder="How can we help you?"
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    placeholder="How can we help you?"
                     className="form-input"
                   />
                 </motion.div>
 
-                <motion.div variants={itemVariants} style={{ marginBottom: "28px" }}>
-                  <label htmlFor="message" className="form-label">Your Message</label>
+                <motion.div
+                  variants={itemVariants}
+                  style={{ marginBottom: "24px" }}
+                >
+                  <label htmlFor="message" className="form-label">
+                    Your Message
+                  </label>
                   <textarea
-                    id="message" name="message" rows={5}
-                    value={formData.message} onChange={handleChange}
-                    required placeholder="Tell us more..."
+                    id="message"
+                    name="message"
+                    rows={6}
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    placeholder="Tell us more..."
                     className="form-input"
                     style={{ display: "block" }}
                   />
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                  <button type="submit" disabled={isSubmitting} className="submit-btn">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="submit-btn"
+                  >
                     {isSubmitting ? (
                       <>
-                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="32" strokeDashoffset="12" strokeLinecap="round" />
+                        <svg
+                          className="w-4 h-4 animate-spin"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeDasharray="32"
+                            strokeDashoffset="12"
+                            strokeLinecap="round"
+                          />
                         </svg>
                         Sending…
                       </>
@@ -548,7 +750,6 @@ const Contact = () => {
                 </motion.div>
               </form>
             </motion.div>
-
           </div>
         </div>
       </section>

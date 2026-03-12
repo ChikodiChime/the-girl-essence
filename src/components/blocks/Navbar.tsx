@@ -3,60 +3,32 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ROUTES } from "@/config/routes";
 
 const navLinks = [
-  { name: "Home", href: "#hero" },
-  { name: "About", href: "#about" },
-  { name: "Programs", href: "#programs" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: ROUTES.home },
+  { name: "About", href: ROUTES.about },
+  { name: "Programs", href: ROUTES.programs },
+  { name: "Gallery", href: ROUTES.gallery },
+  // { name: "Contact", href: ROUTES.contact },
 ];
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-
-      // Update active section based on scroll position
-      const sections = navLinks.map((link) => link.href.replace("#", ""));
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 150) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string,
-  ) => {
-    e.preventDefault();
-    const targetId = href.replace("#", "");
-    const element = document.getElementById(targetId);
-    if (element) {
-      const navHeight = 80;
-      const elementPosition =
-        element.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: elementPosition - navHeight,
-        behavior: "smooth",
-      });
-    }
-    setMenuOpen(false);
-    setActiveSection(targetId);
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
   };
 
   return (
@@ -79,103 +51,107 @@ const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "py-2" : "py-4"
+          scrolled ? "py-2" : "py-3 sm:py-4"
         }`}
       >
-        <div
-          className={`max-w-6xl lg:mx-auto px-4 sm:px-6 transition-all duration-500 mx-4 `}
-        >
+        <div className="mx-auto w-full max-w-6xl px-3 sm:px-4 lg:px-6 transition-all duration-500">
           <div
-            className={`flex justify-between items-center px-4 lg:px-6 transition-all duration-500 h-16 bg-white backdrop-blur-xl shadow-lg shadow-black/5 rounded-2xl border border-white/20`}
+            className={`flex justify-between items-center px-3 sm:px-4 lg:px-6 transition-all duration-500 rounded-2xl border ${
+              scrolled
+                ? "h-14 bg-white/95 backdrop-blur-xl shadow-xl shadow-black/10 border-gray-200/50"
+                : "h-14 sm:h-16 bg-white/80 backdrop-blur-lg shadow-lg shadow-black/5 border-white/30"
+            }`}
           >
             {/* Logo */}
-            <motion.a
-              href="#hero"
-              onClick={(e) => handleNavClick(e, "#hero")}
-              className="flex items-center gap-3 group"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="relative">
-                <Image
-                  src="/logo.png"
-                  alt="The Girl Essence"
-                  width={scrolled ? 45 : 55}
-                  height={scrolled ? 45 : 55}
-                  className="transition-all duration-300"
-                />
-              </div>
-              <div
-                className={`hidden sm:block transition-all duration-300 ${scrolled ? "opacity-100" : "opacity-0 lg:opacity-100"}`}
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                href={ROUTES.home}
+                className="flex items-center gap-2 sm:gap-3 group min-w-0"
               >
-                <span className="text-lg lg:text-xl font-bold text-gray-900">
-                  The Girl <span className="text-[#c8335a]">Essence</span>
-                </span>
-              </div>
-            </motion.a>
+                <div className="relative">
+                  <Image
+                    src="/favicon.svg"
+                    alt="The Girl Essence"
+                    width={scrolled ? 36 : 40}
+                    height={scrolled ? 36 : 40}
+                    className="transition-all duration-300"
+                  />
+                </div>
+                <div
+                  className={`min-w-0 transition-all duration-300 ${scrolled ? "opacity-100" : "opacity-100 lg:opacity-100"}`}
+                >
+                  <span
+                    className="block max-w-[9rem] sm:max-w-none text-sm sm:text-base lg:text-xl font-bold text-gray-900 leading-none sm:leading-tight"
+                    style={{
+                      fontFamily:
+                        "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif",
+                      fontSize: "clamp(1rem, 3.2vw, 1.75rem)",
+                    }}
+                  >
+                    The Girl <span className="text-[#c8335a]">Essence</span>
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link, index) => (
-                <motion.a
+                <motion.div
                   key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 + 0.3 }}
-                  className={`relative px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
-                    activeSection === link.href.replace("#", "")
-                      ? "text-[#c8335a]"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {link.name}
-                  {activeSection === link.href.replace("#", "") && (
-                    <motion.div
-                      layoutId="activeNavBg"
-                      className="absolute inset-0 bg-gradient-to-r from-[#c8335a]/10 to-[#c8335a]/5 rounded-xl -z-10 border border-[#c8335a]/20"
-                      initial={false}
-                      transition={{
-                        type: "spring",
-                        bounce: 0.2,
-                        duration: 0.6,
-                      }}
-                    />
-                  )}
-                  {activeSection !== link.href.replace("#", "") && (
-                    <motion.div
-                      className="absolute inset-0 bg-gray-100/0 hover:bg-gray-100/80 rounded-xl -z-10"
-                      initial={false}
-                      transition={{ duration: 0.2 }}
-                    />
-                  )}
-                </motion.a>
+                  <Link
+                    href={link.href}
+                    className={`relative px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 block ${
+                      isActive(link.href)
+                        ? "text-[#c8335a]"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    {link.name}
+                    {isActive(link.href) && (
+                      <motion.div
+                        layoutId="activeNavBg"
+                        className="absolute inset-0 bg-gradient-to-r from-[#c8335a]/10 to-[#c8335a]/5 rounded-xl -z-10 border border-[#c8335a]/20"
+                        initial={false}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
+                      />
+                    )}
+                  </Link>
+                </motion.div>
               ))}
 
-              <motion.a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, "#contact")}
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6 }}
-                whileHover={{ 
+                whileHover={{
                   scale: 1.05,
-                  boxShadow: "0 20px 25px -5px rgba(200, 51, 90, 0.3), 0 10px 10px -5px rgba(200, 51, 90, 0.2)"
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="ml-4 px-6 py-2.5 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#c8335a]/25 hover:shadow-xl hover:shadow-[#c8335a]/30 transition-all duration-300 relative overflow-hidden group"
               >
-                <span className="relative z-10">Get Involved</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-[#a02847] to-[#c8335a]"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.a>
+                <Link
+                  href={ROUTES.contact}
+                  className="ml-4 px-6 py-2.5 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold text-sm rounded-xl shadow-lg shadow-[#c8335a]/25 hover:shadow-xl hover:shadow-[#c8335a]/30 transition-all duration-300 relative overflow-hidden group block"
+                >
+                  <span className="relative z-10">Get Involved</span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-[#a02847] to-[#c8335a]"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </Link>
+              </motion.div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -183,7 +159,7 @@ const Navbar = () => {
               onClick={() => setMenuOpen(!menuOpen)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100/80 hover:bg-gray-200/80 transition-colors duration-200"
+              className="lg:hidden relative w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl bg-gray-100/80 hover:bg-gray-200/80 transition-colors duration-200 flex-shrink-0"
               aria-label="Toggle menu"
             >
               <div className="w-5 h-5 flex flex-col justify-center items-center">
@@ -223,54 +199,54 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="lg:hidden absolute top-full left-4 right-4 mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+              className="lg:hidden absolute top-full left-3 right-3 sm:left-4 sm:right-4 mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
             >
-              <div className="p-4 space-y-1">
+              <div className="p-3 sm:p-4 space-y-1">
                 {navLinks.map((link, index) => (
-                  <motion.a
+                  <motion.div
                     key={link.href}
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      activeSection === link.href.replace("#", "")
-                        ? "text-[#c8335a] bg-gradient-to-r from-[#c8335a]/10 to-[#c8335a]/5 border border-[#c8335a]/20 shadow-sm"
-                        : "text-gray-700 hover:text-[#c8335a] hover:bg-gray-50 hover:shadow-sm"
-                    }`}
                   >
-                    {link.name}
-                    {activeSection === link.href.replace("#", "") && (
-                      <motion.div
-                        className="ml-auto w-1.5 h-1.5 rounded-full bg-[#c8335a]"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", bounce: 0.5 }}
-                      />
-                    )}
-                  </motion.a>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center px-4 py-3 rounded-xl font-medium text-sm sm:text-base transition-all duration-200 ${
+                        isActive(link.href)
+                          ? "text-[#c8335a] bg-gradient-to-r from-[#c8335a]/10 to-[#c8335a]/5 border border-[#c8335a]/20 shadow-sm"
+                          : "text-gray-700 hover:text-[#c8335a] hover:bg-gray-50 hover:shadow-sm"
+                      }`}
+                    >
+                      {link.name}
+                      {isActive(link.href) && (
+                        <motion.div
+                          className="ml-auto w-1.5 h-1.5 rounded-full bg-[#c8335a]"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", bounce: 0.5 }}
+                        />
+                      )}
+                    </Link>
+                  </motion.div>
                 ))}
 
-                <motion.a
-                  href="#contact"
-                  onClick={(e) => handleNavClick(e, "#contact")}
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                   whileTap={{ scale: 0.98 }}
-                  className="block mt-4 px-4 py-3 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold rounded-xl text-center shadow-lg relative overflow-hidden group"
                 >
-                  <span className="relative z-10">Get Involved</span>
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-[#a02847] to-[#c8335a]"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.a>
+                  <Link
+                    href={ROUTES.contact}
+                    onClick={() => setMenuOpen(false)}
+                    className="block mt-4 px-4 py-3 bg-gradient-to-r from-[#c8335a] to-[#a02847] text-white font-semibold rounded-xl text-center text-sm sm:text-base shadow-lg relative overflow-hidden"
+                  >
+                    <span className="relative z-10">Get Involved</span>
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           )}

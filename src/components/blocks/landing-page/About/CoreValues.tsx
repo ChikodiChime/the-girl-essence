@@ -50,7 +50,10 @@ const coreValues: CoreValue[] = [
 // Index:          0                          1     2                3     4
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) => {
+export const CoreValues: React.FC<CoreValuesProps> = ({
+  variants,
+  isInView,
+}) => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -59,63 +62,17 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
     },
   };
 
-  const renderCard = (
-    value: CoreValue,
-    index: number,
-    variant: "vc-light" | "vc-dark" | "vc-rose",
-    numLabel: string,
-    numStyle?: React.CSSProperties,
-    cardStyle?: React.CSSProperties,
-    titleSize = "1.1rem",
-    iconSize = "w-11 h-11",
-    iconInnerSize = "w-5 h-5",
-  ) => {
-    const Icon = value.icon;
-    return (
-      <motion.div
-        key={value.title}
-        variants={variants}
-        className={`value-card ${variant} rounded-3xl p-6`}
-        style={cardStyle}
-      >
-        <span className="vc-number" style={numStyle}>
-          {numLabel}
-        </span>
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <div
-            className={`vc-icon-wrap inline-flex items-center justify-center ${iconSize} rounded-xl mb-5`}
-          >
-            <Icon className={iconInnerSize} />
-          </div>
-          <h4
-            className="vc-title section-title"
-            style={{ fontSize: titleSize, fontWeight: 700, marginBottom: "6px" }}
-          >
-            {value.title}
-          </h4>
-          <p
-            className="vc-desc"
-            style={{ fontSize: "0.82rem", lineHeight: 1.7 }}
-          >
-            {value.description}
-          </p>
-          <div className="vc-line" />
-        </div>
-      </motion.div>
-    );
-  };
-
   return (
     <motion.div
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="mb-24"
+      className="mb-20 sm:mb-24"
     >
       {/* ── Section header ── */}
       <motion.div
         variants={variants}
-        className="mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"
+        className="mb-10 sm:mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
       >
         <div>
           <p
@@ -149,7 +106,7 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
             color: "#6b5d64",
             maxWidth: "340px",
             lineHeight: 1.75,
-            fontSize: "0.95rem",
+            fontSize: "clamp(0.92rem, 2.4vw, 0.95rem)",
             flexShrink: 0,
           }}
         >
@@ -158,63 +115,61 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
       </motion.div>
 
       {/* ── Bento grid ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gridTemplateRows: "auto auto",
-          gap: "16px",
-        }}
-      >
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-4">
         {/* ── Col 1: Big featured card (spans 2 rows) ── */}
         <motion.div
           variants={variants}
-          className="value-card vc-light rounded-3xl p-8"
+          className="value-card vc-light rounded-3xl p-6 sm:p-8 lg:min-h-[340px] lg:h-full"
           style={{
-            gridColumn: "1",
-            gridRow: "1 / 3",
             background: "#faf8f9",
             border: "1.5px solid #ede4e9",
-            minHeight: "340px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
           }}
         >
-          <span className="vc-number" style={{ fontSize: "9rem", top: "8px", right: "20px" }}>
+          <span
+            className="vc-number"
+            style={{
+              fontSize: "clamp(4.5rem, 18vw, 9rem)",
+              top: "8px",
+              right: "20px",
+            }}
+          >
             01
           </span>
           <div style={{ position: "relative", zIndex: 1 }}>
-            <div className="vc-icon-wrap inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-6">
-              <Heart className="w-7 h-7" />
+            <div className="vc-icon-wrap inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl mb-5 sm:mb-6">
+              <Heart className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
             <h4
               className="vc-title section-title"
-              style={{ fontSize: "1.65rem", fontWeight: 700, marginBottom: "10px" }}
+              style={{
+                fontSize: "clamp(1.35rem, 4vw, 1.65rem)",
+                fontWeight: 700,
+                marginBottom: "10px",
+              }}
             >
               {coreValues[0].title}
             </h4>
-            <p className="vc-desc" style={{ fontSize: "0.95rem", lineHeight: 1.8 }}>
+            <p
+              className="vc-desc"
+              style={{
+                fontSize: "clamp(0.9rem, 2.6vw, 0.95rem)",
+                lineHeight: 1.8,
+              }}
+            >
               {coreValues[0].description}
             </p>
             <div className="vc-line" />
           </div>
         </motion.div>
 
-        {/* ── Col 2, Row 1: dark + light ── */}
-        <div
-          style={{
-            gridColumn: "2",
-            gridRow: "1",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "16px",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Card 2 — dark */}
           <motion.div
             variants={variants}
-            className="value-card vc-dark rounded-3xl p-6"
+            className="value-card vc-dark rounded-3xl p-5 sm:p-6"
             style={{
               background: "#1a1118",
               border: "1.5px solid #2e2028",
@@ -227,11 +182,18 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
               </div>
               <h4
                 className="vc-title section-title"
-                style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}
+                style={{
+                  fontSize: "clamp(1rem, 2.8vw, 1.1rem)",
+                  fontWeight: 700,
+                  marginBottom: "6px",
+                }}
               >
                 {coreValues[1].title}
               </h4>
-              <p className="vc-desc" style={{ fontSize: "0.82rem", lineHeight: 1.65 }}>
+              <p
+                className="vc-desc"
+                style={{ fontSize: "0.82rem", lineHeight: 1.65 }}
+              >
                 {coreValues[1].description}
               </p>
               <div className="vc-line" />
@@ -241,7 +203,7 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
           {/* Card 3 — light */}
           <motion.div
             variants={variants}
-            className="value-card vc-light rounded-3xl p-6"
+            className="value-card vc-light rounded-3xl p-5 sm:p-6"
             style={{
               background: "#faf8f9",
               border: "1.5px solid #ede4e9",
@@ -254,11 +216,18 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
               </div>
               <h4
                 className="vc-title section-title"
-                style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}
+                style={{
+                  fontSize: "clamp(1rem, 2.8vw, 1.1rem)",
+                  fontWeight: 700,
+                  marginBottom: "6px",
+                }}
               >
                 {coreValues[2].title}
               </h4>
-              <p className="vc-desc" style={{ fontSize: "0.82rem", lineHeight: 1.65 }}>
+              <p
+                className="vc-desc"
+                style={{ fontSize: "0.82rem", lineHeight: 1.65 }}
+              >
                 {coreValues[2].description}
               </p>
               <div className="vc-line" />
@@ -266,20 +235,11 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
           </motion.div>
         </div>
 
-        {/* ── Col 2, Row 2: rose + light ── */}
-        <div
-          style={{
-            gridColumn: "2",
-            gridRow: "2",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "16px",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:col-start-2">
           {/* Card 4 — rose */}
           <motion.div
             variants={variants}
-            className="value-card vc-rose rounded-3xl p-6"
+            className="value-card vc-rose rounded-3xl p-5 sm:p-6"
             style={{
               background: "linear-gradient(140deg, #c8335a 0%, #7c1933 100%)",
               border: "1.5px solid transparent",
@@ -292,11 +252,18 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
               </div>
               <h4
                 className="vc-title section-title"
-                style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}
+                style={{
+                  fontSize: "clamp(1rem, 2.8vw, 1.1rem)",
+                  fontWeight: 700,
+                  marginBottom: "6px",
+                }}
               >
                 {coreValues[3].title}
               </h4>
-              <p className="vc-desc" style={{ fontSize: "0.82rem", lineHeight: 1.65 }}>
+              <p
+                className="vc-desc"
+                style={{ fontSize: "0.82rem", lineHeight: 1.65 }}
+              >
                 {coreValues[3].description}
               </p>
               <div className="vc-line" />
@@ -306,7 +273,7 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
           {/* Card 5 — light */}
           <motion.div
             variants={variants}
-            className="value-card vc-light rounded-3xl p-6"
+            className="value-card vc-light rounded-3xl p-5 sm:p-6"
             style={{
               background: "#faf8f9",
               border: "1.5px solid #ede4e9",
@@ -319,11 +286,18 @@ export const CoreValues: React.FC<CoreValuesProps> = ({ variants, isInView }) =>
               </div>
               <h4
                 className="vc-title section-title"
-                style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  marginBottom: "6px",
+                }}
               >
                 {coreValues[4].title}
               </h4>
-              <p className="vc-desc" style={{ fontSize: "0.82rem", lineHeight: 1.65 }}>
+              <p
+                className="vc-desc"
+                style={{ fontSize: "0.82rem", lineHeight: 1.65 }}
+              >
                 {coreValues[4].description}
               </p>
               <div className="vc-line" />

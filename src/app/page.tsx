@@ -1,21 +1,21 @@
 import HeroSlideshow from "@/components/blocks/landing-page/Hero";
-import AboutUs from "@/components/blocks/landing-page/About";
-import Programs from "@/components/blocks/landing-page/Upcoming";
-import Gallery from "@/components/blocks/landing-page/Gallery";
+import HomeAboutTeaser from "@/components/blocks/landing-page/HomeAboutTeaser";
+import HomeImpact from "@/components/blocks/landing-page/HomeImpact";
+import HomeGalleryTeaser from "@/components/blocks/landing-page/HomeGalleryTeaser";
+import HomeInstagramCTA from "@/components/blocks/landing-page/HomeInstagramCTA";
+import HomeProgramsTeaser from "@/components/blocks/landing-page/HomeProgramsTeaser";
 import Testimonial from "@/components/blocks/landing-page/Testimonial";
-import Partners from "@/components/blocks/landing-page/Partners";
-import Contact from "@/components/blocks/landing-page/Contact";
 
 export default function Home() {
   return (
     <main>
       <HeroSlideshow />
-      <AboutUs />
-      <Programs />
-      <Gallery />
+      <HomeImpact />
+      <HomeAboutTeaser />
+      <HomeProgramsTeaser />
+      <HomeGalleryTeaser />
       <Testimonial />
-      {/* <Partners /> */}
-      <Contact />
+      <HomeInstagramCTA />
     </main>
   );
 }

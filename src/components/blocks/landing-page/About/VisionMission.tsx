@@ -25,12 +25,12 @@ export const VisionMission: React.FC<VisionMissionProps> = ({
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="grid md:grid-cols-2 gap-5 mb-24"
+      className="grid md:grid-cols-2 gap-4 sm:gap-5 mb-20 sm:mb-24"
     >
       {/* Vision */}
       <motion.div
         variants={variants}
-        className="noise-bg card-shimmer relative overflow-hidden rounded-3xl p-9 lg:p-11 text-white"
+        className="noise-bg card-shimmer relative overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-11 text-white"
         style={{
           background:
             "linear-gradient(140deg, #c8335a 0%, #8c1f3f 60%, #5a1029 100%)",
@@ -41,8 +41,8 @@ export const VisionMission: React.FC<VisionMissionProps> = ({
             position: "absolute",
             top: "-60px",
             right: "-60px",
-            width: "220px",
-            height: "220px",
+            width: "min(220px, 42vw)",
+            height: "min(220px, 42vw)",
             borderRadius: "50%",
             background: "rgba(255,255,255,0.08)",
             pointerEvents: "none",
@@ -53,8 +53,8 @@ export const VisionMission: React.FC<VisionMissionProps> = ({
             position: "absolute",
             bottom: "20px",
             left: "30px",
-            width: "100px",
-            height: "100px",
+            width: "min(100px, 22vw)",
+            height: "min(100px, 22vw)",
             borderRadius: "50%",
             background: "rgba(255,255,255,0.05)",
             pointerEvents: "none",
@@ -62,7 +62,7 @@ export const VisionMission: React.FC<VisionMissionProps> = ({
         />
         <div className="relative z-10">
           <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-7"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold mb-5 sm:mb-7"
             style={{
               background: "rgba(255,255,255,0.18)",
               letterSpacing: "0.08em",
@@ -89,7 +89,7 @@ export const VisionMission: React.FC<VisionMissionProps> = ({
       {/* Mission */}
       <motion.div
         variants={variants}
-        className="noise-bg card-shimmer relative overflow-hidden rounded-3xl p-9 lg:p-11 text-white"
+        className="noise-bg card-shimmer relative overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-11 text-white"
         style={{ background: "#1a1118" }}
       >
         <div
@@ -119,7 +119,7 @@ export const VisionMission: React.FC<VisionMissionProps> = ({
         />
         <div className="relative z-10">
           <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-7"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold mb-5 sm:mb-7"
             style={{
               background: "rgba(255,255,255,0.1)",
               letterSpacing: "0.08em",

@@ -74,11 +74,11 @@ export const WhoWeServe: React.FC<WhoWeServeProps> = ({
       variants={containerVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      className="mb-24"
+      className="mb-20 sm:mb-24"
     >
       <motion.div
         variants={variants}
-        className="mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"
+        className="mb-10 sm:mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
       >
         <div>
           <p
@@ -112,7 +112,7 @@ export const WhoWeServe: React.FC<WhoWeServeProps> = ({
             color: "#6b5d64",
             maxWidth: "340px",
             lineHeight: 1.7,
-            fontSize: "0.9rem",
+            fontSize: "clamp(0.88rem, 2.2vw, 0.9rem)",
             flexShrink: 0,
           }}
         >
@@ -120,18 +120,18 @@ export const WhoWeServe: React.FC<WhoWeServeProps> = ({
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         {items.map((item, i) => {
           const p = palettes[i];
           return (
             <motion.div
               key={item.label}
               variants={variants}
-              className="serve-card rounded-3xl p-7"
+              className="serve-card rounded-3xl p-5 sm:p-6 lg:p-7"
               style={{
                 background: p.bg,
                 border: `1.5px solid ${p.border}`,
-                minHeight: "220px",
+                minHeight: "200px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -150,7 +150,7 @@ export const WhoWeServe: React.FC<WhoWeServeProps> = ({
                 <h4
                   className="section-title"
                   style={{
-                    fontSize: "1.15rem",
+                    fontSize: "clamp(1rem, 2.8vw, 1.15rem)",
                     fontWeight: 700,
                     color: p.textColor,
                     marginBottom: "8px",
@@ -161,7 +161,7 @@ export const WhoWeServe: React.FC<WhoWeServeProps> = ({
                 </h4>
                 <p
                   style={{
-                    fontSize: "0.8rem",
+                    fontSize: "clamp(0.78rem, 2.2vw, 0.8rem)",
                     color: p.subColor,
                     lineHeight: 1.7,
                   }}

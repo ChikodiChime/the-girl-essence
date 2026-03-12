@@ -11,6 +11,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
+import { ROUTES } from "@/config/routes";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -24,7 +25,7 @@ const styles = `
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 16px;
   }
   
   .modal-content {
@@ -68,13 +69,13 @@ const styles = `
     transform: translateY(-50%) scale(1.1);
   }
   
-  .modal-nav-btn.prev { left: 20px; }
-  .modal-nav-btn.next { right: 20px; }
+  .modal-nav-btn.prev { left: 12px; }
+  .modal-nav-btn.next { right: 12px; }
   
   .modal-close-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 12px;
+    right: 12px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -249,9 +250,9 @@ const Gallery = () => {
             >
               <Image
                 src={image.src}
-                  alt={image.alt}
-                  fill
-                 sizes="(max-width: 768px) 50vw,
+                alt={image.alt}
+                fill
+                sizes="(max-width: 768px) 50vw,
          (max-width: 1024px) 33vw,
          20vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -290,7 +291,7 @@ const Gallery = () => {
       <section
         ref={sectionRef}
         id="gallery"
-        className="py-28 bg-white relative overflow-hidden"
+        className="py-20 sm:py-24 lg:py-28 bg-white relative overflow-hidden"
         style={{ fontFamily: "'DM Sans', sans-serif" }}
       >
         {/* Ambient blob */}
@@ -315,7 +316,7 @@ const Gallery = () => {
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="text-center mb-24"
+            className="text-center mb-14 sm:mb-20 lg:mb-24"
           >
             <motion.div
               variants={itemVariants}
@@ -350,7 +351,7 @@ const Gallery = () => {
             <motion.p
               variants={itemVariants}
               style={{
-                fontSize: "1.05rem",
+                fontSize: "clamp(0.96rem, 2.8vw, 1.05rem)",
                 color: "#6b5d64",
                 maxWidth: "580px",
                 margin: "0 auto",
@@ -367,14 +368,14 @@ const Gallery = () => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="gallery-container relative h-[500px] lg:h-[600px] overflow-hidden rounded-3xl"
+            className="gallery-container relative h-[420px] sm:h-[500px] lg:h-[600px] overflow-hidden rounded-3xl"
           >
             {/* Gradient overlays for smooth edges */}
             <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-gray-50 to-transparent z-10 pointer-events-none" />
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent z-10 pointer-events-none" />
 
             {/* Column Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 h-full">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 h-full">
               {/* Column 1 - Scrolls up */}
               <div className="overflow-hidden">
                 <GalleryColumn
@@ -433,7 +434,7 @@ const Gallery = () => {
               <p className="text-gray-500 text-sm">
                 More photos coming soon! Follow us on{" "}
                 <a
-                  href="https://instagram.com/thegirlessence"
+                  href={ROUTES.external.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#c8335a] hover:underline font-medium"
@@ -505,15 +506,15 @@ const Gallery = () => {
               <div
                 style={{
                   position: "absolute",
-                  bottom: "20px",
+                  bottom: "12px",
                   left: "50%",
                   transform: "translateX(-50%)",
                   background: "rgba(0, 0, 0, 0.6)",
                   backdropFilter: "blur(10px)",
-                  padding: "8px 16px",
+                  padding: "6px 14px",
                   borderRadius: "20px",
                   color: "white",
-                  fontSize: "0.875rem",
+                  fontSize: "0.8rem",
                   fontWeight: 500,
                 }}
               >

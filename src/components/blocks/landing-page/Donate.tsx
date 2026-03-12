@@ -9,13 +9,12 @@ import {
   Briefcase,
   BookMarked,
 } from "lucide-react";
-import React, { useRef } from "react";
-import { Button } from "@/components/ui/Button";
+import { useRef } from "react";
+import { ROUTES } from "@/config/routes";
 
 const Donate = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -98,14 +97,22 @@ const Donate = () => {
           <motion.h2
             variants={itemVariants}
             className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6"
+            style={{
+              fontFamily:
+                "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif",
+              fontSize: "clamp(2.4rem, 6vw, 4rem)",
+              fontWeight: 700,
+              lineHeight: 1.1,
+              letterSpacing: "-0.01em",
+            }}
           >
             Support a Girl.{" "}
-            <span className="text-[#c8335a]">Empower Her Future.</span>
+            <span className="text-[#c8335a] italic">Empower Her Future.</span>
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
-            className="text-xl text-gray-600 max-w-4xl mx-auto mb-12"
+            className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto mb-10 sm:mb-12"
           >
             Every girl deserves a chance to rise — and your support can make
             that possible. Whether through scholarships, mentorship,
@@ -118,21 +125,23 @@ const Donate = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-14 sm:mb-16"
         >
           {donationOptions.map((option, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className="group bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 hover:border-[#c8335a]/20"
+              className="group bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 hover:border-[#c8335a]/20"
             >
               <div className="w-12 h-12 rounded-full bg-[#c8335a]/10 flex items-center justify-center mb-4 text-[#c8335a]">
                 <option.icon className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                 {option.title}
               </h3>
-              <p className="text-gray-600">{option.description}</p>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                {option.description}
+              </p>
             </motion.div>
           ))}
         </motion.div>
@@ -141,12 +150,14 @@ const Donate = () => {
           variants={itemVariants}
           className="flex flex-col sm:flex-row justify-center gap-6 mt-12"
         >
-          <Button variant="primary" size="lg" className="px-12 py-4">
+          <a
+            href={ROUTES.external.whatsapp()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-full sm:w-auto items-center justify-center px-8 sm:px-12 py-4 bg-[#c8335a] text-white font-semibold rounded-lg hover:bg-[#b02d4d] transition-colors duration-200"
+          >
             Become a Supporter
-          </Button>
-          <Button variant="outline" size="lg" className="px-12 py-4">
-            Donate
-          </Button>
+          </a>
         </motion.div>
       </div>
     </section>

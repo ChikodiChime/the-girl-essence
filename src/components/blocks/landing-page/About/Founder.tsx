@@ -26,7 +26,7 @@ export const Founder: React.FC<FounderProps> = ({ variants, isInView }) => {
     >
       <motion.div
         variants={variants}
-        className="founder-card relative overflow-hidden rounded-3xl p-8 lg:p-12 bg-white"
+        className="founder-card relative overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-12 bg-white"
         style={{
           border: "1.5px solid #ede4e9",
           boxShadow:
@@ -49,11 +49,11 @@ export const Founder: React.FC<FounderProps> = ({ variants, isInView }) => {
           }}
         />
 
-        <div className="grid lg:grid-cols-3 gap-8 items-center relative z-10">
+        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 items-center relative z-10">
           {/* Image */}
           <div className="lg:col-span-1 flex justify-center lg:justify-start">
             <div
-              className="founder-image-wrap relative w-52 h-52 lg:w-full lg:h-72 rounded-2xl flex items-center justify-center"
+              className="founder-image-wrap relative w-44 h-44 sm:w-52 sm:h-52 lg:w-full lg:h-72 rounded-2xl flex items-center justify-center"
               style={{
                 background:
                   "linear-gradient(140deg, rgba(200,51,90,0.15) 0%, rgba(160,40,71,0.08) 100%)",
@@ -96,7 +96,7 @@ export const Founder: React.FC<FounderProps> = ({ variants, isInView }) => {
           {/* Info */}
           <div className="lg:col-span-2">
             <div
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-5"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold mb-5"
               style={{
                 background: "rgba(200,51,90,0.08)",
                 color: "#c8335a",
@@ -125,9 +125,9 @@ export const Founder: React.FC<FounderProps> = ({ variants, isInView }) => {
             <p
               style={{
                 color: "#6b5d64",
-                lineHeight: 1.85,
+                lineHeight: 1.8,
                 marginBottom: "24px",
-                fontSize: "0.975rem",
+                fontSize: "clamp(0.92rem, 2.5vw, 0.975rem)",
               }}
             >
               Obiamaka Nwachi is a girl coach, mentor, and social impact
@@ -142,7 +142,7 @@ export const Founder: React.FC<FounderProps> = ({ variants, isInView }) => {
               {["Girl Coach", "Mentor", "Social Impact Advocate"].map((tag) => (
                 <span
                   key={tag}
-                  className="tag-chip px-4 py-2 rounded-full text-sm font-medium cursor-default"
+                  className="tag-chip px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium cursor-default"
                   style={{
                     background: "#f4f0f2",
                     color: "#5a4a52",

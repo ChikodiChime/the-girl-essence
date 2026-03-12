@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import React, { useRef } from "react";
 import Image from "next/image";
+import { ROUTES } from "@/config/routes";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -234,7 +235,7 @@ const programs = [
     tags: ["Annual event", "Networking", "Skills training"],
     description:
       "An annual empowerment summit bringing together girls and young women for inspiration, mentorship, and access to real opportunities.",
-    href: "#",
+    href: ROUTES.programDetail("afrigirl-summit"),
   },
   {
     id: "afrigirl-scholars",
@@ -243,7 +244,7 @@ const programs = [
     tags: ["Scholarships", "Certifications", "Skill development"],
     description:
       "Identifying and supporting promising girls through scholarships, free trainings, certifications, and skill-development opportunities.",
-    href: "#",
+    href: ROUTES.programDetail("afrigirl-scholars"),
   },
   {
     id: "girls-talk",
@@ -252,7 +253,7 @@ const programs = [
     tags: ["Monthly", "Safe space", "Peer learning"],
     description:
       "Monthly themed discussions on life skills, relationships, self-worth, boundaries, and personal development.",
-    href: "#",
+    href: ROUTES.programDetail("girls-talk"),
   },
   {
     id: "gist-with-her",
@@ -261,7 +262,7 @@ const programs = [
     tags: ["Open conversations", "No judgment", "Guidance"],
     description:
       "A safe, relaxed conversation series where girls talk openly about real-life issues and receive guidance without judgment.",
-    href: "#",
+    href: ROUTES.programDetail("gist-with-her"),
   },
   {
     id: "university-outreach",
@@ -270,7 +271,7 @@ const programs = [
     tags: ["Campus programs", "Community", "Advocacy"],
     description:
       "Educational and advocacy programs addressing substance abuse, health, self-esteem, and leadership across universities and communities.",
-    href: "#",
+    href: ROUTES.programDetail("university-outreach"),
   },
 ];
 
